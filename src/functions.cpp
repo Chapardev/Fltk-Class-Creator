@@ -13,22 +13,25 @@ unsigned int GetNumberOfUpperCaseLetters(const std::string &text)
     return result;
 }
 
-void SeparateWords(std::string &text, char separator)
+std::string SeparateWords(const std::string &text, char separator)
 {
+    std::string result{text};
     unsigned int numberOfUpperCaseLetters{GetNumberOfUpperCaseLetters(text)};
 
     // I have to use two loops because when you insert a character in the string, its length increases
     for (size_t i{0}; i < numberOfUpperCaseLetters; i++)
     {
-        for (size_t j{1}; j < text.length(); j++)
+        for (size_t j{1}; j < result.length(); j++)
         {
-            if (std::isupper(text[j]) && text[j-1] != separator)
+            if (std::isupper(result[j]) && result[j-1] != separator)
             {
-                text.insert(j, 1, separator);
+                result.insert(j, 1, separator);
                 break;
             }
         }
     }
+
+    return result;
 }
 
 std::string ToUpper(const std::string &text)
@@ -44,43 +47,47 @@ std::string ToUpper(const std::string &text)
     return result;
 }
 
-void HandlePunctuation(std::string &text, char punctuation)
+std::string HandlePunctuation(const std::string &text, const std::string &punctuations)
 {
-    while (text.find(punctuation) != std::string::npos)
+    std::string result{text};
+    for (size_t i{0}; i < punctuations.length(); i++)
     {
-        size_t pos{text.find(punctuation)};
-        if (pos + 1 < text.size() && std::islower(text[pos+1]))
+        while (result.find(punctuations[i]) != std::string::npos)
         {
-            text[pos+1] = std::toupper(text[pos+1]);
+            size_t pos{result.find(punctuations[i])};
+            if (pos + 1 < result.size() && std::islower(result[pos+1]))
+            {
+                result[pos+1] = std::toupper(result[pos+1]);
+            }
+            result.erase(std::find(result.begin(), result.end(), punctuations[i]));
         }
-        text.erase(std::find(text.begin(), text.end(), punctuation));
     }
+    return result;
 }
 
-void CreateClassName(std::string &className)
+std::string CreateClassName(const std::string &className)
 {
-    if (std::islower(className[0]))
+    std::string result{className};
+    if (std::islower(result[0]))
     {
-        className[0] = std::toupper(className[0]);
+        result[0] = std::toupper(result[0]);
     }
 
-    for (const auto &c : " &~\"#'{([-|`\\^@)]=}+/*-<>,?;.:!§")
-    {
-        HandlePunctuation(className, c);
-    }
+    result = HandlePunctuation(result, " &~\"#'{([-|`\\^@)]=}+/*-<>,?;.:!§");
 
     // If this conditional statement was omitted there would be issues with the files, as an identifier cannot begin with a digit
-    if (std::isdigit(className[0]))
+    if (std::isdigit(result[0]))
     {
-        className.insert(0, 1, '_');
+        result.insert(0, 1, '_');
     }
 
-    // _myClass will become _MyClass
-    for (size_t i{0}; i < className.length(); i++)
+    for (size_t i{0}; i < result.length(); i++)
     {
-        if (className[i-1] == '_' && std::islower(className[i]))
+        if (result[i-1] == '_' && std::islower(result[i]))
         {
-            className[i] = std::toupper(className[i]);
+            result[i] = std::toupper(result[i]);
         }
     }
+
+    return result;
 }

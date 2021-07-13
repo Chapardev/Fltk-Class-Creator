@@ -2,23 +2,12 @@
 
 void MyWindow::_SaveButtonCallback()
 {
-    std::string className{m_classNameInput.value()};
-
     // If the input text is not empty
-    if (className[0])
+    if (m_classNameInput.value()[0])
     {
-        CreateClassName(className);
-
-        std::string inheritedClassName{m_inheritanceInput.value()};
-        if (m_inheritanceInput.value()[0])
-        {
-            CreateClassName(inheritedClassName);
-        }
-
-        ClassCreator classCreator{
-            className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), 
-            m_inheritanceInput.value()[0] ? inheritedClassName : ""
-        };
+        const std::string className{CreateClassName(m_classNameInput.value())};
+        const std::string inheritedClassName{m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""};
+        ClassCreator classCreator{className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), inheritedClassName};
     }
 }
 

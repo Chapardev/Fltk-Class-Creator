@@ -1,13 +1,10 @@
 #include "ClassCreator.hpp"
 
 ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass)
-    : m_className{className}, m_inheritedClassName{inheritedClass}, m_upperCaseClassName{className}, 
+    : m_className{className}, m_inheritedClassName{inheritedClass}, 
+      m_upperCaseClassName{ToUpper(SeparateWords(m_className, '_')) + "_HPP"}, 
       m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
-      
 {
-    SeparateWords(m_upperCaseClassName, '_');
-    m_upperCaseClassName = ToUpper(m_upperCaseClassName) + "_HPP";
-
     this->CreateHppFile();
     this->CreateCppFile();
 }
