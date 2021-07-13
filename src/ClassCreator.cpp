@@ -1,7 +1,7 @@
 #include "ClassCreator.hpp"
 
-ClassCreator::ClassCreator(const std::string &className, bool destructor, const std::string &filePath)
-    : m_className{className}, m_filePath{filePath}, m_upperCaseClassName{className}, m_hasDestructor{destructor}
+ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &filePath)
+    : m_className{className}, m_filePath{filePath}, m_upperCaseClassName{className}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
 {
     SeparateWords(m_upperCaseClassName, '_');
 
@@ -46,7 +46,12 @@ void ClassCreator::CreateHppFile()
 
     if (m_hasDestructor)
     {
-        m_ofs << "\t~" << m_className << "();\n";
+        m_ofs << '\t';
+        if (m_isDestructorVirtual)
+        {
+            m_ofs << "virtual ";
+        }
+        m_ofs << '~' << m_className << "();\n";
     }
 
     m_ofs << '\n';

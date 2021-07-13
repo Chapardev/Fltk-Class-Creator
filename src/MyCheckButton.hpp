@@ -3,6 +3,7 @@
 
 #include "ClassCreator.hpp"
 
+// Check button that updates each time it is checked or not
 class MyCheckButton : public Fl_Check_Button
 {
 public:

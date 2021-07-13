@@ -10,7 +10,7 @@ private:
 	void _OpenFile(const std::string &fileExtension);
 
 public:
-	ClassCreator(const std::string &className, bool destructor, const std::string &filePath="");
+	ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &filePath="");
 
 	void CreateHppFile();
 	void CreateCppFile();
@@ -20,7 +20,9 @@ private:
 	const std::string m_className;
 	std::string m_filePath;
 	std::string m_upperCaseClassName;
+
 	const bool m_hasDestructor;
+	const bool m_isDestructorVirtual;
 };
 
 #endif // CLASS_CREATOR_HPP
