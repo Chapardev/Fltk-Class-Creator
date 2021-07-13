@@ -1,2 +1,7 @@
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+build/ClassCreator.o
+build/functions.o
+build/main.o
+build/MyCheckButton.o
+build/MyWindow.o

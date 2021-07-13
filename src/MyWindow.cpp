@@ -7,23 +7,18 @@ void MyWindow::_SaveButtonCallback()
     // If the input text is not empty
     if (className[0])
     {
-        if (std::islower(className[0]))
+        CreateClassName(className);
+
+        std::string inheritedClassName{m_inheritanceInput.value()};
+        if (m_inheritanceInput.value()[0])
         {
-            className[0] = std::toupper(className[0]);
+            CreateClassName(inheritedClassName);
         }
 
-        for (const auto &c : " &~\"#'{([-|`_\\^@)]=}+/*-<>,?;.:!§")
-        {
-            HandlePunctuation(className, c);
-        }
-
-        // If this conditional statement was omitted there would be issues with the files, as an identifier cannot begin with a digit
-        if (std::isdigit(className[0]))
-        {
-            className.insert(0, 1, '_');
-        }
-
-        ClassCreator classCreator{className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked()};
+        ClassCreator classCreator{
+            className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), 
+            m_inheritanceInput.value()[0] ? inheritedClassName : ""
+        };
     }
 }
 
@@ -33,8 +28,9 @@ MyWindow::MyWindow()
       m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y(), 100, 30, "Generate!"},
       m_destructorCheckButton{m_classNameInput.x(), m_classNameInput.y() + 30, 126, 30, "Add a destructor"},
       m_virtualDestructorCheckButton{   
-        m_destructorCheckButton.x() + m_destructorCheckButton.w(), m_destructorCheckButton.y(), 100, 30, "Make it virtual"
-      }
+        m_destructorCheckButton.x() + m_destructorCheckButton.w() + 10, m_destructorCheckButton.y(), 108, 30, "Make it virtual"
+      },
+      m_inheritanceInput{m_classNameInput.x(), m_destructorCheckButton.y() + 30, m_classNameInput.w(), m_classNameInput.h(), "Inherits from:"}
 {
     auto ButtonCallBack{
         [](Fl_Widget *widget, void *pointer)
@@ -50,5 +46,5 @@ MyWindow::MyWindow()
     m_virtualDestructorCheckButton.tooltip("Works only if the destructor box is checked");
 
     this->end();
-	this->show();
+    this->show();
 }

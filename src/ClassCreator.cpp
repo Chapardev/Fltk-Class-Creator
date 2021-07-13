@@ -1,16 +1,12 @@
 #include "ClassCreator.hpp"
 
-ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &filePath)
-    : m_className{className}, m_filePath{filePath}, m_upperCaseClassName{className}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass)
+    : m_className{className}, m_inheritedClassName{inheritedClass}, m_upperCaseClassName{className}, 
+      m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+      
 {
     SeparateWords(m_upperCaseClassName, '_');
-
-    for (size_t i{0}; i < m_upperCaseClassName.length(); i++)
-    {
-        m_upperCaseClassName[i] = std::toupper(m_upperCaseClassName[i]);
-    }
-
-    m_upperCaseClassName += "_HPP";
+    m_upperCaseClassName = ToUpper(m_upperCaseClassName) + "_HPP";
 
     this->CreateHppFile();
     this->CreateCppFile();
@@ -24,7 +20,7 @@ void ClassCreator::_OpenFile(const std::string &fileExtension)
         m_ofs.clear();
     }
     
-    m_ofs.open(m_filePath + m_className + fileExtension);
+    m_ofs.open(m_className + fileExtension);
 
     if (!m_ofs.is_open())
     {
@@ -39,7 +35,13 @@ void ClassCreator::CreateHppFile()
     m_ofs << "#ifndef " << m_upperCaseClassName << '\n';
     m_ofs << "#define " << m_upperCaseClassName << "\n\n";
 
-    m_ofs << "class " << m_className << '\n';
+    m_ofs << "class " << m_className;
+    if (!m_inheritedClassName.empty())
+    {
+        m_ofs << " : public " << m_inheritedClassName;
+    }
+    m_ofs << '\n';
+
     m_ofs << "{\n";
     m_ofs << "public:\n";
     m_ofs << "\t" << m_className << "();\n";

@@ -16,6 +16,7 @@ private:
 	Fl_Button m_saveButton;
 	MyCheckButton m_destructorCheckButton;
 	MyCheckButton m_virtualDestructorCheckButton;
+	Fl_Input m_inheritanceInput;
 };
 
 #endif // MY_WINDOW_HPP
