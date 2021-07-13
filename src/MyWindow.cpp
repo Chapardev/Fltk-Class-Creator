@@ -23,7 +23,7 @@ void MyWindow::_SaveButtonCallback()
             className.insert(0, 1, '_');
         }
 
-        ClassCreator classCreator{className};
+        ClassCreator classCreator{className, m_checked};
     }
 }
 
@@ -33,12 +33,26 @@ void MyWindow::_StaticSaveButtonCallback(Fl_Widget *widget, void *pointer)
     me->_SaveButtonCallback();
 }
 
-MyWindow::MyWindow() noexcept
+void MyWindow::_DestructorCheckButtonCallback()
+{
+    m_checked = !m_checked;
+}
+
+void MyWindow::_StaticDestructorCheckButtonCallback(Fl_Widget *widget, void *pointer)
+{
+    MyWindow *me{static_cast<MyWindow *>(pointer)};
+    me->_DestructorCheckButtonCallback();
+}
+
+MyWindow::MyWindow()
     : Fl_Window{800, 600, "FltkClassCreator"},
       m_classNameInput{100, 10, 230, 30, "Class name:"}, 
-      m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y(), 100, 30, "Save!"}
+      m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y(), 100, 30, "Save!"},
+      m_destructorCheckButton{m_classNameInput.x(), m_classNameInput.y() + 30, 126, 30, "Add a destructor"},
+      m_checked{false}
 {
     m_saveButton.callback(this->_StaticSaveButtonCallback, this);
+    m_destructorCheckButton.callback(this->_StaticDestructorCheckButtonCallback, this);
 
     this->end();
 	this->show();

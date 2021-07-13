@@ -1,11 +1,11 @@
 #include "ClassCreator.hpp"
 
-ClassCreator::ClassCreator(const std::string &className, const std::string &filePath)
-    : m_className(className), m_filePath(filePath), m_upperCaseClassName(className)
+ClassCreator::ClassCreator(const std::string &className, bool destructor, const std::string &filePath)
+    : m_className{className}, m_filePath{filePath}, m_upperCaseClassName{className}, m_hasDestructor{destructor}
 {
     SeparateWords(m_upperCaseClassName, '_');
 
-    for (size_t i = 0; i < m_upperCaseClassName.length(); i++)
+    for (size_t i{0}; i < m_upperCaseClassName.length(); i++)
     {
         m_upperCaseClassName[i] = std::toupper(m_upperCaseClassName[i]);
     }
@@ -43,8 +43,13 @@ void ClassCreator::CreateHppFile()
     m_ofs << "{\n";
     m_ofs << "public:\n";
     m_ofs << "\t" << m_className << "();\n";
-    m_ofs << "\t~" << m_className << "();\n\n";
 
+    if (m_hasDestructor)
+    {
+        m_ofs << "\t~" << m_className << "();\n";
+    }
+
+    m_ofs << '\n';
     m_ofs << "private:\n\t\n";
     m_ofs << "};\n\n";
 
@@ -59,9 +64,13 @@ void ClassCreator::CreateCppFile()
 
     m_ofs << m_className << "::" << m_className << "()\n";
     m_ofs << "{\n\t\n";
-    m_ofs << "}\n\n";
-
-    m_ofs << m_className << "::~" << m_className << "()\n";
-    m_ofs << "{\n\t\n";
     m_ofs << "}\n";
+
+    if (m_hasDestructor)
+    {
+        m_ofs << '\n';
+        m_ofs << m_className << "::~" << m_className << "()\n";
+        m_ofs << "{\n\t\n";
+        m_ofs << "}\n";
+    }
 }
