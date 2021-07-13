@@ -10,7 +10,6 @@ private:
 	void _OpenFile(const std::string &fileExtension);
 
 public:
-	// When
 	ClassCreator(const std::string &className, const std::string &filePath="");
 
 	void CreateHppFile();
