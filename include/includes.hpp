@@ -1,5 +1,5 @@
-#ifndef PRECOMPILED_HPP
-#define PRECOMPILED_HPP
+#ifndef INCLUDES_HPP
+#define INCLUDES_HPP
 
 // STL
 #include <algorithm>
@@ -14,4 +14,4 @@
 #include <FL/Fl_Input_Choice.H> // Fl_Check_Button.H includes Fl.H and Fl_Input.H
 #include <FL/Fl_Window.H>
 
-#endif // PRECOMPILED_HPP
+#endif // INCLUDES_HPP
