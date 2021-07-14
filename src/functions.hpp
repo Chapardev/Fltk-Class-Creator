@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
 
-#include "precompiled.hpp"
+#include "includes.hpp"
 
 // Counts the number of capital letters
 unsigned int GetNumberOfUpperCaseLetters(const std::string &text);
