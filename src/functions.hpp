@@ -3,7 +3,7 @@
 
 #include "precompiled.hpp"
 
-// Counts the number of capital letters (ignores the first character)
+// Counts the number of capital letters
 unsigned int GetNumberOfUpperCaseLetters(const std::string &text);
 
 // Separates words (which begins with a capital letter) in a string with a certain character

@@ -2,23 +2,16 @@
 
 unsigned int GetNumberOfUpperCaseLetters(const std::string &text)
 {
-    unsigned int result{0};
-    for (size_t i{1}; i < text.length(); i++)
-    {
-        if (std::isupper(text[i]))
-        {
-            result++;
-        }
-    }
-    return result;
+    return std::count_if(text.begin(), text.end(), [](char c) { return std::isupper(c); });
 }
 
 std::string SeparateWords(const std::string &text, char separator)
 {
-    std::string result{text};
-    unsigned int numberOfUpperCaseLetters{GetNumberOfUpperCaseLetters(text)};
+    std::string result{std::move(text)};
+    // We do not want to separate words from the first capital character
+    unsigned int numberOfUpperCaseLetters{GetNumberOfUpperCaseLetters(text) - 1};
 
-    // I have to use two loops because when you insert a character in the string, its length increases
+    // You have to use two loops because when you insert a character in the string, its length increases
     for (size_t i{0}; i < numberOfUpperCaseLetters; i++)
     {
         for (size_t j{1}; j < result.length(); j++)
@@ -36,20 +29,14 @@ std::string SeparateWords(const std::string &text, char separator)
 
 std::string ToUpper(const std::string &text)
 {
-    std::string result{text};
-    for (size_t i{0}; i < result.length(); i++)
-    {
-        if (std::islower(result[i]))
-        {
-            result[i] = std::toupper(result[i]);
-        }
-    }
+    std::string result{std::move(text)};
+    std::for_each(result.begin(), result.end(), [](char &c) { c = std::toupper(c); });
     return result;
 }
 
 std::string HandlePunctuation(const std::string &text, const std::string &punctuations)
 {
-    std::string result{text};
+    std::string result{std::move(text)};
     for (const auto &p : punctuations)
     {
         while (result.find(p) != std::string::npos)
@@ -67,7 +54,7 @@ std::string HandlePunctuation(const std::string &text, const std::string &punctu
 
 std::string CreateClassName(const std::string &className)
 {
-    std::string result{className};
+    std::string result{std::move(className)};
     if (std::islower(result[0]))
     {
         result[0] = std::toupper(result[0]);
