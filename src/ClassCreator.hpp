@@ -10,7 +10,8 @@ private:
 	void _OpenFile(const std::string &fileExtension);
 
 public:
-	ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &inheritedClass);
+	ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &inheritedClass, 
+				 const std::string &inheritanceMode);
 
 	void CreateHppFile();
 	void CreateCppFile();
@@ -19,7 +20,8 @@ private:
 	std::ofstream m_ofs;
 	const std::string m_className;
 	const std::string m_inheritedClassName;
-	std::string m_upperCaseClassName;
+	const std::string m_upperCaseClassName;
+	const std::string m_inheritanceMode;
 
 	const bool m_hasDestructor;
 	const bool m_isDestructorVirtual;

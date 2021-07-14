@@ -50,16 +50,16 @@ std::string ToUpper(const std::string &text)
 std::string HandlePunctuation(const std::string &text, const std::string &punctuations)
 {
     std::string result{text};
-    for (size_t i{0}; i < punctuations.length(); i++)
+    for (const auto &p : punctuations)
     {
-        while (result.find(punctuations[i]) != std::string::npos)
+        while (result.find(p) != std::string::npos)
         {
-            size_t pos{result.find(punctuations[i])};
+            size_t pos{result.find(p)};
             if (pos + 1 < result.size() && std::islower(result[pos+1]))
             {
                 result[pos+1] = std::toupper(result[pos+1]);
             }
-            result.erase(std::find(result.begin(), result.end(), punctuations[i]));
+            result.erase(std::find(result.begin(), result.end(), p));
         }
     }
     return result;

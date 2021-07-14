@@ -1,9 +1,9 @@
 #include "ClassCreator.hpp"
 
-ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass)
-    : m_className{className}, m_inheritedClassName{inheritedClass}, 
-      m_upperCaseClassName{ToUpper(SeparateWords(m_className, '_')) + "_HPP"}, 
-      m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass,
+                           const std::string &inheritanceMode)
+    : m_className{className}, m_inheritedClassName{inheritedClass}, m_upperCaseClassName{ToUpper(SeparateWords(m_className, '_')) + "_HPP"}, 
+      m_inheritanceMode{inheritanceMode}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
 {
     this->CreateHppFile();
     this->CreateCppFile();
@@ -30,12 +30,17 @@ void ClassCreator::CreateHppFile()
     this->_OpenFile(".hpp");
 
     m_ofs << "#ifndef " << m_upperCaseClassName << '\n';
-    m_ofs << "#define " << m_upperCaseClassName << "\n\n";
+    m_ofs << "#define " << m_upperCaseClassName << '\n';
 
-    m_ofs << "class " << m_className;
     if (!m_inheritedClassName.empty())
     {
-        m_ofs << " : public " << m_inheritedClassName;
+        m_ofs << "\n#include \"" << m_inheritedClassName << ".hpp\"\n";
+    }
+
+    m_ofs << "\nclass " << m_className;
+    if (!m_inheritedClassName.empty())
+    {
+        m_ofs << " : " << m_inheritanceMode << ' ' << m_inheritedClassName;
     }
     m_ofs << '\n';
 
