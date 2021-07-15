@@ -1,9 +1,11 @@
 #include "ClassCreator.hpp"
 
 ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass,
-                           const std::string &inheritanceMode)
-    : m_className{className}, m_inheritedClassName{inheritedClass}, m_upperCaseClassName{ToUpper(SeparateWords(m_className, '_')) + "_HPP"}, 
-      m_inheritanceMode{inheritanceMode}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+                           const std::string &inheritanceMode, const std::string &directoryPath)
+    : m_className{className}, m_inheritedClassName{inheritedClass}, 
+      m_upperCaseClassName{boost::to_upper_copy(SeparateWords(m_className, '_')) + "_HPP"}, 
+      m_inheritanceMode{inheritanceMode}, m_directoryPath{directoryPath},
+      m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
 {
     this->CreateHppFile();
     this->CreateCppFile();
@@ -17,11 +19,11 @@ void ClassCreator::_OpenFile(const std::string &fileExtension)
         m_ofs.clear();
     }
     
-    m_ofs.open(m_className + fileExtension);
+    m_ofs.open(m_directoryPath + m_className + fileExtension);
 
     if (!m_ofs.is_open())
     {
-        throw std::string("Unable to open " + m_className + fileExtension + " file.");
+        throw std::string("Unable to open " + m_directoryPath + m_className + fileExtension + " file.");
     }
 }
 

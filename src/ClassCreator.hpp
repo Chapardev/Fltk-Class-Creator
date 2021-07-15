@@ -11,7 +11,7 @@ private:
 
 public:
 	ClassCreator(const std::string &className, bool destructor, bool isVirtual, const std::string &inheritedClass, 
-				 const std::string &inheritanceMode);
+				 const std::string &inheritanceMode, const std::string &directoryPath);
 
 	void CreateHppFile();
 	void CreateCppFile();
@@ -22,6 +22,7 @@ private:
 	const std::string m_inheritedClassName;
 	const std::string m_upperCaseClassName;
 	const std::string m_inheritanceMode;
+	const std::string m_directoryPath;
 
 	const bool m_hasDestructor;
 	const bool m_isDestructorVirtual;

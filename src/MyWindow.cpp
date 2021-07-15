@@ -9,12 +9,20 @@ void MyWindow::_SaveButtonCallback()
         const std::string inheritedClassName{m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""};
 
         std::string inheritanceMode{m_inheritanceModeInputChoice.value()};
-        if (!(inheritanceMode == "public" || inheritanceMode == "protected" || inheritanceMode == "private"))
+        if (!((inheritanceMode == "public") || (inheritanceMode == "protected") || (inheritanceMode == "private")))
+        {
             inheritanceMode = "public";
+        }
 
-        ClassCreator classCreator{
-            className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), inheritedClassName, inheritanceMode
-        };
+        const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
+
+        if (directoryPath)
+        {
+            ClassCreator classCreator{
+                className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), inheritedClassName, inheritanceMode,
+                directoryPath
+            };
+        }
     }
 }
 

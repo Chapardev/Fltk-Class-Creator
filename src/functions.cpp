@@ -27,13 +27,6 @@ std::string SeparateWords(const std::string &text, char separator)
     return result;
 }
 
-std::string ToUpper(const std::string &text)
-{
-    std::string result{std::move(text)};
-    std::for_each(result.begin(), result.end(), [](char &c) { c = std::toupper(c); });
-    return result;
-}
-
 std::string HandlePunctuation(const std::string &text, const std::string &punctuations)
 {
     std::string result{std::move(text)};
