@@ -13,14 +13,19 @@ void MyWindow::_SaveButtonCallback()
         {
             inheritanceMode = "public";
         }
+        
+        std::string headerFileExtension{m_headerFileExtensionInputChoice.value()};
+        if (!((headerFileExtension == "hpp") || (headerFileExtension == "h") || (headerFileExtension == "hh")))
+        {
+            headerFileExtension = "hpp";
+        }
 
         const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
-
         if (directoryPath)
         {
             ClassCreator classCreator{
                 className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), inheritedClassName, inheritanceMode,
-                directoryPath
+                headerFileExtension, directoryPath
             };
         }
     }
@@ -37,6 +42,10 @@ MyWindow::MyWindow()
           m_classNameInput.x(), m_classNameInput.y() + m_classNameInput.h() + 10, m_classNameInput.w(), m_classNameInput.h(), "Inherits from:"
       },
       m_inheritanceModeInputChoice{m_inheritanceInput.x() + m_inheritanceInput.w() + 10, m_inheritanceInput.y(), 100, 30},
+      m_headerFileExtensionInputChoice{
+          m_inheritanceModeInputChoice.x(), m_inheritanceModeInputChoice.y() + m_inheritanceModeInputChoice.h() + 10, 
+          m_inheritanceModeInputChoice.w(), m_inheritanceModeInputChoice.h()
+      },
       m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y() + 200, 100, 30, "Generate!"}
 {
     m_virtualDestructorCheckButton.tooltip("Works only if the destructor box is checked");
@@ -45,6 +54,11 @@ MyWindow::MyWindow()
     m_inheritanceModeInputChoice.add("public");
     m_inheritanceModeInputChoice.add("protected");
     m_inheritanceModeInputChoice.add("private");
+
+    m_headerFileExtensionInputChoice.value("hpp");
+    m_headerFileExtensionInputChoice.add("hpp");
+    m_headerFileExtensionInputChoice.add("h");
+    m_headerFileExtensionInputChoice.add("hh");
 
     auto ButtonCallBack{
         [](Fl_Widget *widget, void *pointer)

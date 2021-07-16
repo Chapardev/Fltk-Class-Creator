@@ -1,11 +1,12 @@
 #include "ClassCreator.hpp"
 
-ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClass,
-                           const std::string &inheritanceMode, const std::string &directoryPath)
-    : m_className{className}, m_inheritedClassName{inheritedClass}, 
-      m_upperCaseClassName{boost::to_upper_copy(SeparateWords(m_className, '_')) + "_HPP"}, 
-      m_inheritanceMode{inheritanceMode}, m_directoryPath{directoryPath},
-      m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+ClassCreator::ClassCreator(const std::string &className, bool destructor, bool isVirtual,  const std::string &inheritedClassName,
+                           const std::string &inheritanceMode, const std::string &headerFileExtension, const std::string &directoryPath)
+    : m_className{className}, m_inheritedClassName{inheritedClassName},
+      m_inheritanceMode{inheritanceMode},
+      m_headerFileExtension{'.' + headerFileExtension},
+      m_upperCaseClassName{boost::to_upper_copy(SeparateWords(m_className, '_')) + '_' + boost::to_upper_copy(headerFileExtension)},
+      m_directoryPath{directoryPath}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
 {
     this->CreateHppFile();
     this->CreateCppFile();
@@ -29,14 +30,14 @@ void ClassCreator::_OpenFile(const std::string &fileExtension)
 
 void ClassCreator::CreateHppFile()
 {
-    this->_OpenFile(".hpp");
+    this->_OpenFile(m_headerFileExtension);
 
     m_ofs << "#ifndef " << m_upperCaseClassName << '\n';
     m_ofs << "#define " << m_upperCaseClassName << '\n';
 
     if (!m_inheritedClassName.empty())
     {
-        m_ofs << "\n#include \"" << m_inheritedClassName << ".hpp\"\n";
+        m_ofs << "\n#include \"" << m_inheritedClassName << m_headerFileExtension << "\"\n";
     }
 
     m_ofs << "\nclass " << m_className;
