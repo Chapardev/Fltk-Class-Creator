@@ -7,20 +7,11 @@ void MyWindow::_SaveButtonCallback()
     {
         const std::string className{CreateClassName(m_classNameInput.value())};
         const std::string inheritedClassName{m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""};
-
-        std::string inheritanceMode{m_inheritanceModeInputChoice.value()};
-        if (!((inheritanceMode == "public") || (inheritanceMode == "protected") || (inheritanceMode == "private")))
-        {
-            inheritanceMode = "public";
-        }
+        const std::string inheritanceMode{m_inheritanceModeInputChoice.GetValue()};
+        const std::string headerFileExtension{m_headerFileExtensionInputChoice.GetValue()};
         
-        std::string headerFileExtension{m_headerFileExtensionInputChoice.value()};
-        if (!((headerFileExtension == "hpp") || (headerFileExtension == "h") || (headerFileExtension == "hh")))
-        {
-            headerFileExtension = "hpp";
-        }
-
         const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
+
         if (directoryPath)
         {
             ClassCreator classCreator{
@@ -36,30 +27,24 @@ MyWindow::MyWindow()
       m_classNameInput{100, 10, 230, 30, "Class name:"}, 
       m_destructorCheckButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y(), 126, 30, "Add a destructor"},
       m_virtualDestructorCheckButton{   
-        m_destructorCheckButton.x() + m_destructorCheckButton.w() + 10, m_destructorCheckButton.y(), 108, 30, "Make it virtual"
+        m_destructorCheckButton.x() + m_destructorCheckButton.w() + 10, m_destructorCheckButton.y(), 108, 30, "Make it virtual",
+        "Works only if the destructor box is checked"
       },
       m_inheritanceInput{
           m_classNameInput.x(), m_classNameInput.y() + m_classNameInput.h() + 10, m_classNameInput.w(), m_classNameInput.h(), "Inherits from:"
       },
-      m_inheritanceModeInputChoice{m_inheritanceInput.x() + m_inheritanceInput.w() + 10, m_inheritanceInput.y(), 100, 30},
+      m_inheritanceModeInputChoice{
+          m_inheritanceInput.x() + m_inheritanceInput.w() + 10, m_inheritanceInput.y(), 100, 30, 
+          {"public", "protected", "private"}
+      },
       m_headerFileExtensionInputChoice{
-          m_inheritanceModeInputChoice.x(), m_inheritanceModeInputChoice.y() + m_inheritanceModeInputChoice.h() + 10, 
-          m_inheritanceModeInputChoice.w(), m_inheritanceModeInputChoice.h()
+          m_inheritanceModeInputChoice.x() + m_inheritanceModeInputChoice.w() + 10, 
+          m_inheritanceModeInputChoice.y(), 
+          m_inheritanceModeInputChoice.w(), m_inheritanceModeInputChoice.h(),
+          {"hpp", "h", "hh"}
       },
       m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y() + 200, 100, 30, "Generate!"}
 {
-    m_virtualDestructorCheckButton.tooltip("Works only if the destructor box is checked");
-
-    m_inheritanceModeInputChoice.value("public");
-    m_inheritanceModeInputChoice.add("public");
-    m_inheritanceModeInputChoice.add("protected");
-    m_inheritanceModeInputChoice.add("private");
-
-    m_headerFileExtensionInputChoice.value("hpp");
-    m_headerFileExtensionInputChoice.add("hpp");
-    m_headerFileExtensionInputChoice.add("h");
-    m_headerFileExtensionInputChoice.add("hh");
-
     auto ButtonCallBack{
         [](Fl_Widget *widget, void *pointer)
         {

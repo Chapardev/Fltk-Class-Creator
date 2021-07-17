@@ -5,10 +5,11 @@
 
 // Check button that updates each time it is checked or not
 class MyCheckButton : public Fl_Check_Button
+
 {
 public:
-	MyCheckButton(int x, int y, int width, int height, const char *label);
-	
+	// Text parameters must be const char * because if you use std::string, there will be strange issues at runtime
+	MyCheckButton(int x, int y, int width, int height, const char *label, const char *tooltip="");
 	bool IsChecked() const { return m_checked; }
 
 private:

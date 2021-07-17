@@ -3,6 +3,7 @@
 
 // STL
 #include <algorithm>
+#include <array>
 #include <cstring>
 #include <fstream>
 #include <iostream> // Also includes string
