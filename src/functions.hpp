@@ -12,7 +12,7 @@ std::string SeparateWords(const std::string &text, char separator);
 // Deletes punctuations from the text and replace the next letters by their capital one
 std::string HandlePunctuation(const std::string &text, const std::string &punctuations);
 
-// Modifies a string to apply class naming conventions (PascalCase and no punctuations)
+// Returns a string to apply class naming conventions (PascalCase and no punctuations, except underscores)
 std::string CreateClassName(const std::string &className);
 
 #endif

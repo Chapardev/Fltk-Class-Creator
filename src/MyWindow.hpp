@@ -13,11 +13,16 @@ public:
 
 private:
 	Fl_Input m_classNameInput;
+
 	MyCheckButton m_destructorCheckButton;
 	MyCheckButton m_virtualDestructorCheckButton;
+
 	Fl_Input m_inheritanceInput;
 	MyInputChoice m_inheritanceModeInputChoice;
+
 	MyInputChoice m_headerFileExtensionInputChoice;
+	MyInputChoice m_implementationFileExtensionInputChoice;
+	
 	Fl_Button m_saveButton;
 };
 

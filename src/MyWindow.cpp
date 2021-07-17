@@ -5,18 +5,15 @@ void MyWindow::_SaveButtonCallback()
     // If the input text is not empty
     if (m_classNameInput.value()[0])
     {
-        const std::string className{CreateClassName(m_classNameInput.value())};
-        const std::string inheritedClassName{m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""};
-        const std::string inheritanceMode{m_inheritanceModeInputChoice.GetValue()};
-        const std::string headerFileExtension{m_headerFileExtensionInputChoice.GetValue()};
-        
         const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
 
         if (directoryPath)
         {
             ClassCreator classCreator{
-                className, m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(), inheritedClassName, inheritanceMode,
-                headerFileExtension, directoryPath
+                {CreateClassName(m_classNameInput.value()), m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""},
+                m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(),
+                m_inheritanceModeInputChoice.GetValue(), {m_headerFileExtensionInputChoice.GetValue(), 
+                m_implementationFileExtensionInputChoice.GetValue()}, directoryPath
             };
         }
     }
@@ -42,6 +39,12 @@ MyWindow::MyWindow()
           m_inheritanceModeInputChoice.y(), 
           m_inheritanceModeInputChoice.w(), m_inheritanceModeInputChoice.h(),
           {"hpp", "h", "hh"}
+      },
+      m_implementationFileExtensionInputChoice{
+          m_headerFileExtensionInputChoice.x() + m_headerFileExtensionInputChoice.w() + 10, 
+          m_headerFileExtensionInputChoice.y(), 
+          m_headerFileExtensionInputChoice.w(), m_headerFileExtensionInputChoice.h(),
+          {"cpp", "cc", "cxx"}
       },
       m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y() + 200, 100, 30, "Generate!"}
 {
