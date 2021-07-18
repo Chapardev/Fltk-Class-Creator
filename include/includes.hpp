@@ -6,8 +6,8 @@
 #include <array>
 #include <cstring>
 #include <fstream>
-#include <iostream> // Also includes string
 #include <memory>
+#include <string>
 
 // Boost
 #include <boost/algorithm/string.hpp>
