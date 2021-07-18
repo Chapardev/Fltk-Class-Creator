@@ -7,3 +7,4 @@ build/MyCheckButton.o
 build/MyWindow.o
 include/precompiled.hpp.gch
 build/MyInputChoice.o
+build/MyButton.o

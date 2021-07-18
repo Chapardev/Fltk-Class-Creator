@@ -1,12 +1,13 @@
 #ifndef MY_WINDOW_HPP
 #define MY_WINDOW_HPP
 
-#include "MyInputChoice.hpp"
+#include "MyButton.hpp"
 
 class MyWindow : public Fl_Window
 {
 private:
-	void _SaveButtonCallback();
+	void _PathSelectionButtonCallback();
+	void _GenerateButtonCallback();
 
 public:
 	MyWindow();
@@ -22,8 +23,11 @@ private:
 
 	MyInputChoice m_headerFileExtensionInputChoice;
 	MyInputChoice m_implementationFileExtensionInputChoice;
-	
-	Fl_Button m_saveButton;
+
+	Fl_Input m_pathSelectionInput;
+	MyButton m_pathSelectionButton;
+
+	MyButton m_generateButton;
 };
 
 #endif // MY_WINDOW_HPP

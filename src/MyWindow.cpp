@@ -1,26 +1,27 @@
 #include "MyWindow.hpp"
 
-void MyWindow::_SaveButtonCallback()
+void MyWindow::_PathSelectionButtonCallback()
+{
+    const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
+    m_pathSelectionInput.value(directoryPath ? directoryPath : "./");
+}
+
+void MyWindow::_GenerateButtonCallback()
 {
     // If the input text is not empty
     if (m_classNameInput.value()[0])
     {
-        const char *directoryPath{fl_dir_chooser("Select folder to generate files", "")};
-
-        if (directoryPath)
-        {
-            ClassCreator classCreator{
-                {CreateClassName(m_classNameInput.value()), m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""},
-                m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(),
-                m_inheritanceModeInputChoice.GetValue(), {m_headerFileExtensionInputChoice.GetValue(), 
-                m_implementationFileExtensionInputChoice.GetValue()}, directoryPath
-            };
-        }
+        ClassCreator classCreator{
+            {CreateClassName(m_classNameInput.value()), m_inheritanceInput.value()[0] ? CreateClassName(m_inheritanceInput.value()) : ""},
+            m_destructorCheckButton.IsChecked(), m_virtualDestructorCheckButton.IsChecked(),
+            m_inheritanceModeInputChoice.GetValue(), {m_headerFileExtensionInputChoice.GetValue(), 
+            m_implementationFileExtensionInputChoice.GetValue()}, m_pathSelectionInput.value()
+        };
     }
 }
 
 MyWindow::MyWindow()
-    : Fl_Window{800, 600, "FltkClassCreator"},
+    : Fl_Window{600, 210, "FltkClassCreator"},
       m_classNameInput{100, 10, 230, 30, "Class name:"}, 
       m_destructorCheckButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y(), 126, 30, "Add a destructor"},
       m_virtualDestructorCheckButton{   
@@ -35,8 +36,8 @@ MyWindow::MyWindow()
           {"public", "protected", "private"}
       },
       m_headerFileExtensionInputChoice{
-          m_inheritanceModeInputChoice.x() + m_inheritanceModeInputChoice.w() + 10, 
-          m_inheritanceModeInputChoice.y(), 
+          m_inheritanceInput.x(), 
+          m_inheritanceInput.y() + m_inheritanceInput.h() + 10, 
           m_inheritanceModeInputChoice.w(), m_inheritanceModeInputChoice.h(),
           {"hpp", "h", "hh"}
       },
@@ -46,17 +47,22 @@ MyWindow::MyWindow()
           m_headerFileExtensionInputChoice.w(), m_headerFileExtensionInputChoice.h(),
           {"cpp", "cc", "cxx"}
       },
-      m_saveButton{m_classNameInput.x() + m_classNameInput.w() + 10, m_classNameInput.y() + 200, 100, 30, "Generate!"}
+      m_pathSelectionInput{
+          m_headerFileExtensionInputChoice.x(), 
+          m_headerFileExtensionInputChoice.y() + m_headerFileExtensionInputChoice.h() + 10,
+          m_inheritanceInput.w(), m_inheritanceInput.h(), "Path:"
+      },
+      m_pathSelectionButton{
+          m_pathSelectionInput.x() + m_pathSelectionInput.w() + 10, m_pathSelectionInput.y(),
+          100, 30, "Select Path", 
+          [](Fl_Widget *widget, void *pointer){static_cast<MyWindow *>(pointer)->_PathSelectionButtonCallback();}, this
+      },
+      m_generateButton{
+          (this->w() - 100) / 2, m_pathSelectionInput.y() + m_pathSelectionInput.h() + 10, 100, 30, "Generate!",
+          [](Fl_Widget *widget, void *pointer){static_cast<MyWindow *>(pointer)->_GenerateButtonCallback();}, this
+      }
 {
-    auto ButtonCallBack{
-        [](Fl_Widget *widget, void *pointer)
-        {
-            MyWindow *me{static_cast<MyWindow *>(pointer)};
-            me->_SaveButtonCallback();
-        }
-    };
-
-    m_saveButton.callback(ButtonCallBack, this);
+    m_pathSelectionInput.value("./");
 
     this->end();
     this->show();

@@ -8,7 +8,7 @@ MyCheckButton::MyCheckButton(int x, int y, int width, int height, const char *la
         this->tooltip(tooltip);
     }
 
-    auto MyCallback{
+    auto myCallback{
         [](Fl_Widget *widget, void *pointer)
         {
             MyCheckButton *me{static_cast<MyCheckButton *>(pointer)};
@@ -16,5 +16,5 @@ MyCheckButton::MyCheckButton(int x, int y, int width, int height, const char *la
         }
     };
 
-    this->callback(MyCallback, this);
+    this->callback(myCallback, this);
 }

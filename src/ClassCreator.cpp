@@ -7,7 +7,8 @@ ClassCreator::ClassCreator(const std::pair<std::string, std::string> &classNames
       m_inheritanceMode{inheritanceMode},
       m_headerFileExtension{'.' + fileExtensions.first}, m_implementationFileExtension{'.' + fileExtensions.second},
       m_upperCaseClassName{boost::to_upper_copy(SeparateWords(m_className, '_')) + '_' + boost::to_upper_copy(fileExtensions.first)},
-      m_directoryPath{directoryPath}, m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
+      m_directoryPath{directoryPath + ((directoryPath[directoryPath.length()-1] != '\\') ? "\\" : "")}, 
+      m_hasDestructor{destructor}, m_isDestructorVirtual{isVirtual}
 {
     this->CreateHeaderFile();
     this->CreateImplementationFile();
